@@ -4,8 +4,10 @@ import org.launchcode.codingevents.data.EventData;
 import org.launchcode.codingevents.models.Event;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,30 +19,26 @@ public class EventController {
 
     @GetMapping
     public String displayAllEvents(Model model) {
-////        List<String> events = new ArrayList<>();
-////        events.add("Apple WWDC");
-////        events.add("Code With Pride");
-////        events.add("Strange Loop");
-////        events.add("SpringOne Platform");
         model.addAttribute("title", "All Events");
         model.addAttribute("events", EventData.getAll());
         return "events/index";
     }
 
     @GetMapping("create")
-    public String renderCreateEventForm(Model model) {
+    public String displayCreateEventForm(Model model) {
         model.addAttribute("title", "Create Event");
+        model.addAttribute(new Event());
         return "events/create";
     }
 
-//    @PostMapping("create")
-//    public String createEvent(@RequestParam String eventName, @RequestParam String eventDescription) {
-//        EventData.add(new Event(eventName, eventDescription));
-//        return "redirect:";
-//    }
-
     @PostMapping("create")
-    public String createEvent(@ModelAttribute Event newEvent) {
+    public String processCreateEventForm(@ModelAttribute @Valid Event newEvent,
+                                         Errors errors, Model model) {
+        if(errors.hasErrors()) {
+            model.addAttribute("title", "Create Event");
+//            model.addAttribute("errorMsg", "Bad data!");
+            return "events/create";
+        }
         EventData.add(newEvent);
         return "redirect:";
     }
@@ -53,7 +51,7 @@ public class EventController {
     }
 
     @PostMapping("delete")
-    public String deleteEvent(@RequestParam(required = false) int[] eventIds) {
+    public String processDeleteEventsForm(@RequestParam(required = false) int[] eventIds) {
         if (eventIds != null) {
             for (int id : eventIds) {
                 EventData.remove(id);
