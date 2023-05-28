@@ -15,7 +15,6 @@ public class Event extends AbstractEntity {
     @Size(min = 3, max = 20, message = "Name must bee between 3 and 50 characters long.")
     private String name;
 
-    @NotBlank(message = "Description is required.")
     @Size(max = 500, message = "Description must no more than 500 characters.")
     private String description;
 
