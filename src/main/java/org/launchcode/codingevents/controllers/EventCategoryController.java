@@ -39,6 +39,7 @@ public class EventCategoryController {
         if (errors.hasErrors()) {
             model.addAttribute("title", "Create Category");
             model.addAttribute(new EventCategory());
+            return "eventCategories/create";
         }
         eventCategoryRepository.save(eventCategory);
         return "redirect:";
