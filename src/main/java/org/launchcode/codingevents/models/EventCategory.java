@@ -6,6 +6,9 @@ import javax.validation.constraints.Size;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Created by Chris Bay
+ */
 @Entity
 public class EventCategory extends AbstractEntity {
 
